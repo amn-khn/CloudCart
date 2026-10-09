@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>CloudCart — Everyday essentials, elevated</title>
+    <meta name="description" content="Discover thoughtfully selected everyday products at CloudCart.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <div class="announcement">
+        Free delivery on orders above ₹999
+        <span> · </span>
+        Thoughtfully selected. Delivered to you.
+    </div>
+
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="CloudCart home">
+            <span class="brand-mark">C</span>
+            <span>cloudcart<span class="brand-period">.</span></span>
+        </a>
+
+        <form class="search-form" id="search-form" role="search">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search"
+                   placeholder="Search products, categories..."
+                   aria-label="Search products">
+            <button type="submit">Search</button>
+        </form>
+
+        <nav class="header-actions" aria-label="Main navigation">
+            <a class="nav-link active" href="#products">Shop</a>
+            <a class="nav-link" href="#categories">Categories</a>
+            <button class="cart-toggle" id="cart-toggle" type="button">
+                <span aria-hidden="true">♧</span>
+                <span>Bag</span>
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow"><span class="status-dot"></span> THE EVERYDAY EDIT</span>
+                <h1>Good things.<br><span>Better living.</span></h1>
+                <p>Useful things, thoughtfully chosen. Discover everyday essentials that bring a little more joy to your routine.</p>
+                <a class="primary-button" href="#products">Explore the collection <span>↗</span></a>
+                <div class="hero-note">
+                    <span>01 — 08</span>
+                    <span>Small upgrades, everyday impact.</span>
+                </div>
+            </div>
+            <div class="hero-art" role="img" aria-label="A curated collection of headphones, a watch and everyday essentials">
+                <div class="art-orbit orbit-one"></div>
+                <div class="art-orbit orbit-two"></div>
+                <div class="art-label label-top">OBJECTS FOR LIVING</div>
+                <div class="art-product product-headphones">◉</div>
+                <div class="art-product product-watch">◷</div>
+                <div class="art-product product-mug">☕</div>
+                <div class="art-caption">
+                    <span>THE DAILY ESSENTIALS</span>
+                    <span>Curated for you ↗</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits" aria-label="Shopping benefits">
+            <div><span class="benefit-icon">↗</span><span><strong>Free delivery</strong><small>On orders over ₹999</small></span></div>
+            <div><span class="benefit-icon">◇</span><span><strong>Thoughtful selection</strong><small>Quality over quantity</small></span></div>
+            <div><span class="benefit-icon">↺</span><span><strong>Easy returns</strong><small>Simple, stress-free returns</small></span></div>
+            <div><span class="benefit-icon">♡</span><span><strong>Here to help</strong><small>Support when you need it</small></span></div>
+        </section>
+
+        <section class="catalogue" id="products">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">THE COLLECTION</span>
+                    <h2>Everyday favourites<span>.</span></h2>
+                    <p>Considered essentials. No unnecessary fuss.</p>
+                </div>
+                <label class="sort-control">Sort by
+                    <select id="sort-select">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: low to high</option>
+                        <option value="price-high">Price: high to low</option>
+                        <option value="name">Name: A to Z</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="categories" id="categories" aria-label="Filter by category">
+                <button class="category-chip selected" data-category="All">All products</button>
+                <button class="category-chip" data-category="Electronics">Electronics</button>
+                <button class="category-chip" data-category="Fashion">Fashion</button>
+                <button class="category-chip" data-category="Accessories">Accessories</button>
+                <button class="category-chip" data-category="Home">Home</button>
+            </div>
+
+            <div class="product-grid" id="product-grid">
+                {% for product in products %}
+                <article class="product-card"
+                         data-product-id="{{ product.id }}"
+                         data-category="{{ product.category }}"
+                         data-name="{{ product.name|lower }}"
+                         data-price="{{ product.price }}">
+                    <div class="product-visual visual-{{ product.id }}">
+                        <span class="product-number">0{{ loop.index }}</span>
+                        <span class="product-emoji" aria-hidden="true">{{ product.emoji }}</span>
+                        <button class="quick-add" type="button"
+                                data-add="{{ product.id }}"
+                                aria-label="Add {{ product.name }} to bag">+</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">{{ product.category }}</span>
+                        <h3>{{ product.name }}</h3>
+                        <div class="product-bottom">
+                            <span class="product-price">₹{{ "{:,}".format(product.price) }}</span>
+                            <button class="text-add" type="button" data-add="{{ product.id }}">Add to bag ↗</button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            <p class="empty-state" id="empty-state" hidden>No products found. Try another search.</p>
+        </section>
+
+        <section class="closing-banner">
+            <div>
+                <span class="eyebrow">A LITTLE MORE THOUGHTFUL</span>
+                <h2>Make room for<br>the good things.</h2>
+            </div>
+            <a href="#products" class="secondary-button">Find your favourites ↗</a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand footer-brand" href="/">cloudcart<span class="brand-period">.</span></a>
+        <span>Thoughtful essentials for everyday living.</span>
+        <span>CloudCart · DevOps Capstone Project</span>
+    </footer>
+
+    <div class="cart-backdrop" id="cart-backdrop"></div>
+    <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping bag" aria-hidden="true">
+        <div class="cart-header">
+            <div><span class="eyebrow">YOUR SELECTION</span><h2>Your bag <span id="drawer-count">(0)</span></h2></div>
+            <button class="close-cart" id="close-cart" aria-label="Close bag">×</button>
+        </div>
+        <div class="cart-items" id="cart-items"><p class="cart-empty">Your bag is waiting for something good.</p></div>
+        <div class="cart-footer">
+            <div class="subtotal-row"><span>Subtotal</span><strong id="cart-total">₹0</strong></div>
+            <p class="delivery-note">Delivery calculated at checkout.</p>
+            <button class="checkout-button" id="checkout-button">Place demo order <span>↗</span></button>
+            <p class="demo-note">Demo checkout only. No payment will be taken.</p>
+            <p class="order-message" id="order-message" role="status"></p>
+        </div>
+    </aside>
+</body>
+</html>
