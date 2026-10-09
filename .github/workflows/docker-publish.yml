@@ -35,3 +35,25 @@ jobs:
           tags: |
             amxnn/cloudcart:latest
             amxnn/cloudcart:${{ github.sha }}
+
+      - name: Notify Slack on success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H 'Content-type: application/json' \
+            --data "{\"text\":\"✅ CloudCart CI/CD SUCCESS\nRepository: $GITHUB_REPOSITORY\nBranch: $GITHUB_REF_NAME\nCommit: $GITHUB_SHA\nDocker image: amxnn/cloudcart:latest\"}" \
+            "$SLACK_WEBHOOK_URL"
+
+      - name: Notify Slack on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H 'Content-type: application/json' \
+            --data "{\"text\":\"❌ CloudCart CI/CD FAILED\nRepository: $GITHUB_REPOSITORY\nBranch: $GITHUB_REF_NAME\nCommit: $GITHUB_SHA\nCheck GitHub Actions for error details.\"}" \
+            "$SLACK_WEBHOOK_URL"
